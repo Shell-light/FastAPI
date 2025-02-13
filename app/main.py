@@ -16,7 +16,6 @@ app = FastAPI()
 
 
 
-
 class Post(BaseModel):
     title: str
     content: str
@@ -56,15 +55,20 @@ def find_index_post(id):
 def root():
     return {"message": "Hello World"}
 
-@app.get("/slqalchemy")
-def test_posts(db: Session = Depends(get_db)):                                                          
-    return{"status": "success"}
+@app.get("/sqlalchemy")
+def test_posts(db: Session = Depends(get_db)):
+
+    posts = db.query(models.Post).all()
+
+    print(posts)
+    return{"data": "successfull"}
 
 
 @app.get("/posts")
-def get_posts():
-    cursor.execute("""SELECT * FROM posts """)
-    posts = cursor.fetchall()
+def get_posts(db: Session = Depends(get_db)):
+    # cursor.execute("""SELECT * FROM posts """)
+    # posts = cursor.fetchall()
+    posts = db.query(models.Post).all()
     return {"data": posts}
 
 
